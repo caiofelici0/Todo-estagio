@@ -7,15 +7,16 @@ import {
     faSquareCheck,
     faSquare,
     faTrashCan,
+    faPenToSquare,
 } from "@fortawesome/free-regular-svg-icons";
 import { Todo } from "@/types/Todo";
 
 type TodoItemProps = {
     todo: Todo;
-    onTodoUpdated: (todo: Todo) => void;
+    onIsCompleted: (todo: Todo) => void;
 };
 
-export default function TodoItem({ todo, onTodoUpdated }: TodoItemProps) {
+export default function TodoItem({ todo, onIsCompleted }: TodoItemProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const toggleDropdown = () => {
@@ -34,7 +35,7 @@ export default function TodoItem({ todo, onTodoUpdated }: TodoItemProps) {
 
             if (response.ok) {
                 const updatedTodo: Todo = await response.json();
-                onTodoUpdated(updatedTodo);
+                onIsCompleted(updatedTodo);
             } else {
                 console.error("Erro ao atualizar tarefa");
             }
@@ -44,7 +45,7 @@ export default function TodoItem({ todo, onTodoUpdated }: TodoItemProps) {
 
         //teste
         todo.isCompleted = !todo.isCompleted;
-        onTodoUpdated(todo);
+        onIsCompleted(todo);
     };
 
     return (
@@ -55,7 +56,7 @@ export default function TodoItem({ todo, onTodoUpdated }: TodoItemProps) {
                         className="flex justify-between items-center cursor-pointer"
                         onClick={toggleDropdown}
                     >
-                        <h2 className="text-lg">{todo.title}</h2>
+                        <h2>{todo.title}</h2>
                         <FontAwesomeIcon icon={faCaretUp} />
                     </div>
                     <hr />
@@ -67,28 +68,32 @@ export default function TodoItem({ todo, onTodoUpdated }: TodoItemProps) {
                         className="flex justify-between items-center cursor-pointer"
                         onClick={toggleDropdown}
                     >
-                        <h2 className="text-lg">{todo.title}</h2>
+                        <h2>{todo.title}</h2>
                         <FontAwesomeIcon icon={faCaretDown} />
                     </div>
                 </div>
             )}
             <div className="flex gap-2 text-xl">
-                {todo.isCompleted ? (
-                    <button>
+                <button>
+                    {todo.isCompleted ? (
                         <FontAwesomeIcon
                             icon={faSquareCheck}
                             onClick={toggleIsCompleted}
                             className="text-green-500"
                         />
-                    </button>
-                ) : (
-                    <button>
+                    ) : (
                         <FontAwesomeIcon
                             icon={faSquare}
                             onClick={toggleIsCompleted}
                         />
-                    </button>
-                )}
+                    )}
+                </button>
+                <button>
+                    <FontAwesomeIcon
+                        icon={faPenToSquare}
+                        className="text-blue-600"
+                    />
+                </button>
                 <button>
                     <FontAwesomeIcon
                         icon={faTrashCan}
