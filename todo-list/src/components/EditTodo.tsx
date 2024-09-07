@@ -1,50 +1,62 @@
 import { Todo } from "@/types/Todo";
 import { useState } from "react";
 
-type AddTodoProps = {
-    onSubmitTodo: (newTodo: Todo) => void;
+type EditTodoProps = {
+    todo: Todo;
+    onSubmitEdit: (todo: Todo) => void;
+    onCloseEdit: () => void;
 };
 
-export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+export default function EditTodo({
+    todo,
+    onSubmitEdit,
+    onCloseEdit,
+}: EditTodoProps) {
+    const [title, setTitle] = useState<string>(todo.title);
+    const [description, setDescription] = useState<string>(todo.description);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("api/todos", {
-                method: "POST",
+            const response = await fetch(`api/todo/${todo.id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     title,
                     description,
-                    isCompleted: false,
                 }),
             });
 
             if (response.ok) {
-                const newTodo: Todo = await response.json();
-                onSubmitTodo(newTodo);
+                const EditTodo: Todo = await response.json();
+                onSubmitEdit(EditTodo);
             } else {
-                console.error("Erro ao criar tarefa");
+                console.error("Erro ao editar tarefa");
             }
         } catch (error) {
-            console.error("Erro ao criar tarefa", error);
+            console.error("Erro ao editar tarefa", error);
         }
 
         //teste
-        onSubmitTodo({ id: 4, title, description, isCompleted: false });
+        onSubmitEdit({
+            id: todo.id,
+            title,
+            description,
+            isCompleted: todo.isCompleted,
+        });
 
-        setTitle("");
-        setDescription("");
+        onCloseEdit();
     };
 
     return (
-        <div>
-            <h1 className="text-lg">Criar nova tarefa:</h1>
+        <div className="bg-neutral-300 p-2 rounded-lg">
+            <div className="flex justify-between">
+                <h1 className="text-lg">Editando tarefa:</h1>
+                <button onClick={onCloseEdit}>cancelar</button>
+            </div>
             <form className="flex gap-2" onSubmit={handleSubmit}>
                 <input
                     className="p-1 rounded-lg border"
@@ -63,10 +75,10 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
                     required
                 />
                 <button
-                    className="border-2 border-green-400 rounded-lg p-1 text-green-400 hover:bg-green-400 hover:text-white transition"
+                    className="border-2 border-blue-600 rounded-lg p-1 text-blue-600 hover:bg-blue-600 hover:text-white transition"
                     type="submit"
                 >
-                    Criar tarefa
+                    Confirmar
                 </button>
             </form>
         </div>

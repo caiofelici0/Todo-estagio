@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import {
     faSquareCheck,
     faSquare,
@@ -10,18 +8,23 @@ import {
     faPenToSquare,
 } from "@fortawesome/free-regular-svg-icons";
 import { Todo } from "@/types/Todo";
+import { useState } from "react";
+import EditTodo from "./EditTodo";
 
 type TodoItemProps = {
     todo: Todo;
     onIsCompleted: (todo: Todo) => void;
+    onDeleted: (id: number) => void;
+    onEdited: (todo: Todo) => void;
 };
 
-export default function TodoItem({ todo, onIsCompleted }: TodoItemProps) {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+export default function TodoItem({
+    todo,
+    onIsCompleted,
+    onDeleted,
+    onEdited,
+}: TodoItemProps) {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     const toggleIsCompleted = async () => {
         try {
@@ -48,59 +51,86 @@ export default function TodoItem({ todo, onIsCompleted }: TodoItemProps) {
         onIsCompleted(todo);
     };
 
+    const deleteTodo = async () => {
+        try {
+            const response = await fetch(`api/todo/${todo.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                onDeleted(todo.id);
+            } else {
+                console.error("Erro ao deletar tarefa");
+            }
+        } catch (error) {
+            console.error("Erro ao deletar tarefa", error);
+        }
+
+        //teste
+        onDeleted(todo.id);
+    };
+
+    const toggleEditTodo = () => {
+        setIsEditing(!isEditing);
+    };
+
     return (
-        <div className="flex flex-row justify-between items-center gap-2">
-            {isOpen ? (
-                <div className="flex flex-col bg-neutral-400 p-2 rounded-lg gap-1 w-full justify-center">
-                    <div
-                        className="flex justify-between items-center cursor-pointer"
-                        onClick={toggleDropdown}
-                    >
-                        <h2>{todo.title}</h2>
-                        <FontAwesomeIcon icon={faCaretUp} />
-                    </div>
-                    <hr />
-                    <p className="text-sm">{todo.description}</p>
-                </div>
+        <>
+            {isEditing ? (
+                <EditTodo
+                    todo={todo}
+                    onSubmitEdit={onEdited}
+                    onCloseEdit={toggleEditTodo}
+                />
             ) : (
-                <div className="flex flex-col hover:bg-neutral-400 p-2 rounded-lg gap-1 w-full transition justify-center">
-                    <div
-                        className="flex justify-between items-center cursor-pointer"
-                        onClick={toggleDropdown}
-                    >
-                        <h2>{todo.title}</h2>
-                        <FontAwesomeIcon icon={faCaretDown} />
+                <div className="flex flex-row justify-between items-center gap-2 p-2 rounded-lg hover:bg-neutral-300 transition">
+                    <div className="flex flex-col w-full justify-center">
+                        <div>
+                            <span>{todo.title}</span>
+                            {todo.isCompleted && (
+                                <span className="text-green-500 text-sm">
+                                    {" "}
+                                    - Tarefa completa
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-sm">{todo.description}</p>
+                    </div>
+                    <div className="flex gap-2 text-xl">
+                        <button>
+                            {todo.isCompleted ? (
+                                <FontAwesomeIcon
+                                    icon={faSquareCheck}
+                                    onClick={toggleIsCompleted}
+                                    className="text-green-500"
+                                />
+                            ) : (
+                                <FontAwesomeIcon
+                                    icon={faSquare}
+                                    onClick={toggleIsCompleted}
+                                />
+                            )}
+                        </button>
+                        <button>
+                            <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                className="text-blue-600"
+                                onClick={toggleEditTodo}
+                            />
+                        </button>
+                        <button>
+                            <FontAwesomeIcon
+                                icon={faTrashCan}
+                                className="text-red-600"
+                                onClick={deleteTodo}
+                            />
+                        </button>
                     </div>
                 </div>
             )}
-            <div className="flex gap-2 text-xl">
-                <button>
-                    {todo.isCompleted ? (
-                        <FontAwesomeIcon
-                            icon={faSquareCheck}
-                            onClick={toggleIsCompleted}
-                            className="text-green-500"
-                        />
-                    ) : (
-                        <FontAwesomeIcon
-                            icon={faSquare}
-                            onClick={toggleIsCompleted}
-                        />
-                    )}
-                </button>
-                <button>
-                    <FontAwesomeIcon
-                        icon={faPenToSquare}
-                        className="text-blue-600"
-                    />
-                </button>
-                <button>
-                    <FontAwesomeIcon
-                        icon={faTrashCan}
-                        className="text-red-600"
-                    />
-                </button>
-            </div>
-        </div>
+        </>
     );
 }
