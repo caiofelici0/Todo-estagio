@@ -3,13 +3,10 @@
 import AddTodo from "@/components/AddTodo";
 import TodoItem from "@/components/TodoItem";
 import { Todo } from "@/types/Todo";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type TodoListProps = {
-    idUser: number;
-};
-
-export default function TodoList({ idUser }: TodoListProps) {
+export default function TodoList() {
     const [todos, setTodos] = useState<Todo[]>([
         {
             id: 1,
@@ -30,15 +27,13 @@ export default function TodoList({ idUser }: TodoListProps) {
             isCompleted: false,
         },
     ]);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchTodos = async () => {
             try {
-                const response = await fetch(`api/todos/${idUser}`, {
+                const response = await fetch("api/todos", {
                     method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
                 });
 
                 if (response.ok) {
@@ -78,10 +73,32 @@ export default function TodoList({ idUser }: TodoListProps) {
         );
     };
 
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("api/logout", {
+                method: "POST",
+            });
+
+            if (response.ok) {
+                router.push("/login");
+            } else {
+                console.error("Erro ao fazer logout");
+            }
+        } catch (error) {
+            console.error("Erro ao fazer logout", error);
+        }
+
+        // teste
+        router.push("/");
+    };
+
     return (
         <main className="h-screen flex items-center justify-center bg-neutral-800">
             <div className="flex flex-col gap-2 bg-neutral-100 min-w-80 rounded-3xl p-5 w-[50rem]">
-                <h1 className="text-xl font-bold">Minhas tarefas</h1>
+                <div className="flex justify-between">
+                    <h1 className="text-xl font-bold">Minhas tarefas</h1>
+                    <button onClick={handleLogout}>Sair</button>
+                </div>
                 <hr className="border-neutral-800" />
                 <AddTodo onSubmitTodo={handleAddTodo} />
                 <hr className="border-neutral-800" />
