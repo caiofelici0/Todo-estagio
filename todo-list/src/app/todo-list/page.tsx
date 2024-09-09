@@ -87,15 +87,13 @@ export default function TodoList() {
                 <AddTodo onSubmitTodo={handleAddTodo} />
                 <hr className="border-neutral-800" />
                 {todos.map((todo) => (
-                    <div>
-                        <TodoItem
-                            key={todo.id}
-                            todo={todo}
-                            onIsCompleted={handleUpdateTodo}
-                            onDeleted={handleDeleteTodo}
-                            onEdited={handleEditTodo}
-                        />
-                    </div>
+                    <TodoItem
+                        key={todo.id}
+                        todo={todo}
+                        onIsCompleted={handleUpdateTodo}
+                        onDeleted={handleDeleteTodo}
+                        onEdited={handleEditTodo}
+                    />
                 ))}
             </div>
         </main>
