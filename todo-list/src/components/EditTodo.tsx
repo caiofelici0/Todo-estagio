@@ -19,18 +19,21 @@ export default function EditTodo({
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/todo/edit", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: todo.id,
-                    title,
-                    description,
-                }),
-                credentials: "include",
-            });
+            const response = await fetch(
+                "http://api-todo-estagio-production.up.railway.app:8080/todo/edit",
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: todo.id,
+                        title,
+                        description,
+                    }),
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 const data = await response.json();

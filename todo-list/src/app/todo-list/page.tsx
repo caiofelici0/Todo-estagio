@@ -13,10 +13,13 @@ export default function TodoList() {
     useEffect(() => {
         const fetchTodos = async () => {
             try {
-                const response = await fetch("http://localhost:3000/todo/", {
-                    method: "GET",
-                    credentials: "include",
-                });
+                const response = await fetch(
+                    "http://api-todo-estagio-production.up.railway.app:8080/todo/",
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    }
+                );
 
                 if (response.ok) {
                     const data = await response.json();
@@ -61,10 +64,13 @@ export default function TodoList() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:3000/user/logout", {
-                method: "POST",
-                credentials: "include",
-            });
+            const response = await fetch(
+                "http://api-todo-estagio-production.up.railway.app:8080/user/logout",
+                {
+                    method: "POST",
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 router.push("/");

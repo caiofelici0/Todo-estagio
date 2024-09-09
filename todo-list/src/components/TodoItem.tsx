@@ -57,14 +57,17 @@ export default function TodoItem({
 
     const deleteTodo = async () => {
         try {
-            const response = await fetch("http://localhost:3000/todo", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id: todo.id }),
-                credentials: "include",
-            });
+            const response = await fetch(
+                "http://api-todo-estagio-production.up.railway.app:8080/todo",
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: todo.id }),
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 onDeleted(todo.id);

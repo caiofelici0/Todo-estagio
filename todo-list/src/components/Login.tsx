@@ -13,14 +13,17 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/user/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password }),
-                credentials: "include",
-            });
+            const response = await fetch(
+                "http://api-todo-estagio-production.up.railway.app:8080/user/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 router.push("/todo-list");

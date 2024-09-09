@@ -13,17 +13,20 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/todo", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title,
-                    description,
-                }),
-                credentials: "include",
-            });
+            const response = await fetch(
+                "http://api-todo-estagio-production.up.railway.app:8080/todo",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                    }),
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
                 const data = await response.json();

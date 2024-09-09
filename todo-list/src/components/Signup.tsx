@@ -20,7 +20,7 @@ export default function Signup({ onSubmitSignup }: SignupProps) {
         else {
             try {
                 const response = await fetch(
-                    "http://localhost:3000/user/signup",
+                    "http://api-todo-estagio-production.up.railway.app:8080/user/signup",
                     {
                         method: "POST",
                         headers: {
