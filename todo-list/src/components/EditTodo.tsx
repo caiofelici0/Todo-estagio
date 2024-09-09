@@ -19,19 +19,22 @@ export default function EditTodo({
         e.preventDefault();
 
         try {
-            const response = await fetch(`api/todo/${todo.id}`, {
+            const response = await fetch("http://localhost:3000/todo/edit", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    id: todo.id,
                     title,
                     description,
                 }),
+                credentials: "include",
             });
 
             if (response.ok) {
-                const EditTodo: Todo = await response.json();
+                const data = await response.json();
+                const EditTodo: Todo = data.props;
                 onSubmitEdit(EditTodo);
             } else {
                 console.error("Erro ao editar tarefa");
@@ -39,14 +42,6 @@ export default function EditTodo({
         } catch (error) {
             console.error("Erro ao editar tarefa", error);
         }
-
-        //teste
-        onSubmitEdit({
-            id: todo.id,
-            title,
-            description,
-            isCompleted: todo.isCompleted,
-        });
 
         onCloseEdit();
     };

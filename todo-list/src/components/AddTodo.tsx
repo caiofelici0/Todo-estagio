@@ -13,7 +13,7 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
         e.preventDefault();
 
         try {
-            const response = await fetch("api/todos", {
+            const response = await fetch("http://localhost:3000/todo", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -21,12 +21,13 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
                 body: JSON.stringify({
                     title,
                     description,
-                    isCompleted: false,
                 }),
+                credentials: "include",
             });
 
             if (response.ok) {
-                const newTodo: Todo = await response.json();
+                const data = await response.json();
+                const newTodo: Todo = data.props;
                 onSubmitTodo(newTodo);
             } else {
                 console.error("Erro ao criar tarefa");
@@ -34,12 +35,6 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
         } catch (error) {
             console.error("Erro ao criar tarefa", error);
         }
-
-        //teste
-        onSubmitTodo({ id: 4, title, description, isCompleted: false });
-
-        setTitle("");
-        setDescription("");
     };
 
     return (

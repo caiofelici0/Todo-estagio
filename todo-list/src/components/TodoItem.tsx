@@ -28,16 +28,24 @@ export default function TodoItem({
 
     const toggleIsCompleted = async () => {
         try {
-            const response = await fetch(`api/todo/${todo.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ isCompleted: !todo.isCompleted }),
-            });
+            const response = await fetch(
+                "http://localhost:3000/todo/complete",
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: todo.id,
+                        isCompleted: !todo.isCompleted,
+                    }),
+                    credentials: "include",
+                }
+            );
 
             if (response.ok) {
-                const updatedTodo: Todo = await response.json();
+                const data = await response.json();
+                const updatedTodo: Todo = data.props;
                 onIsCompleted(updatedTodo);
             } else {
                 console.error("Erro ao atualizar tarefa");
@@ -45,19 +53,17 @@ export default function TodoItem({
         } catch (error) {
             console.error("Erro ao atualizar tarefa", error);
         }
-
-        //teste
-        todo.isCompleted = !todo.isCompleted;
-        onIsCompleted(todo);
     };
 
     const deleteTodo = async () => {
         try {
-            const response = await fetch(`api/todo/${todo.id}`, {
+            const response = await fetch("http://localhost:3000/todo", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({ id: todo.id }),
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -68,9 +74,6 @@ export default function TodoItem({
         } catch (error) {
             console.error("Erro ao deletar tarefa", error);
         }
-
-        //teste
-        onDeleted(todo.id);
     };
 
     const toggleEditTodo = () => {

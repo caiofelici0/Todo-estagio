@@ -19,13 +19,17 @@ export default function Signup({ onSubmitSignup }: SignupProps) {
             setError("Confirme sua senha corretamente");
         else {
             try {
-                const response = await fetch("api/signup", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, password }),
-                });
+                const response = await fetch(
+                    "http://localhost:3000/user/signup",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ email, password }),
+                        credentials: "include",
+                    }
+                );
 
                 if (response.ok) {
                     onSubmitSignup();
@@ -34,10 +38,8 @@ export default function Signup({ onSubmitSignup }: SignupProps) {
                 }
             } catch (error) {
                 setError("Falha ao realizar cadastro");
+                console.error(error);
             }
-
-            //teste
-            onSubmitSignup();
         }
     };
 

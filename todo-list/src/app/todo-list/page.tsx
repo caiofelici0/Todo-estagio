@@ -7,38 +7,24 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TodoList() {
-    const [todos, setTodos] = useState<Todo[]>([
-        {
-            id: 1,
-            title: "Corrida",
-            description: "correr muito",
-            isCompleted: true,
-        },
-        {
-            id: 2,
-            title: "Trabalhar",
-            description: "foco 100%",
-            isCompleted: false,
-        },
-        {
-            id: 3,
-            title: "Buscar filha",
-            description: "buscar filha na escola",
-            isCompleted: false,
-        },
-    ]);
+    const [todos, setTodos] = useState<Todo[]>([]);
     const router = useRouter();
 
     useEffect(() => {
         const fetchTodos = async () => {
             try {
-                const response = await fetch("api/todos", {
+                const response = await fetch("http://localhost:3000/todo/", {
                     method: "GET",
+                    credentials: "include",
                 });
 
                 if (response.ok) {
-                    const data: Todo[] = await response.json();
-                    setTodos(data);
+                    const data = await response.json();
+                    const todos: Todo[] = data.map(
+                        (todo: { props: Todo }) => todo.props
+                    );
+                    setTodos(todos);
+                    console.log(data);
                 } else {
                     console.error("Erro ao carregar tarefas");
                 }
@@ -75,21 +61,19 @@ export default function TodoList() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("api/logout", {
+            const response = await fetch("http://localhost:3000/user/logout", {
                 method: "POST",
+                credentials: "include",
             });
 
             if (response.ok) {
-                router.push("/login");
+                router.push("/");
             } else {
                 console.error("Erro ao fazer logout");
             }
         } catch (error) {
             console.error("Erro ao fazer logout", error);
         }
-
-        // teste
-        router.push("/");
     };
 
     return (
@@ -103,13 +87,15 @@ export default function TodoList() {
                 <AddTodo onSubmitTodo={handleAddTodo} />
                 <hr className="border-neutral-800" />
                 {todos.map((todo) => (
-                    <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                        onIsCompleted={handleUpdateTodo}
-                        onDeleted={handleDeleteTodo}
-                        onEdited={handleEditTodo}
-                    />
+                    <div>
+                        <TodoItem
+                            key={todo.id}
+                            todo={todo}
+                            onIsCompleted={handleUpdateTodo}
+                            onDeleted={handleDeleteTodo}
+                            onEdited={handleEditTodo}
+                        />
+                    </div>
                 ))}
             </div>
         </main>
