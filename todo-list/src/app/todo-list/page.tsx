@@ -14,7 +14,7 @@ export default function TodoList() {
         const fetchTodos = async () => {
             try {
                 const response = await fetch(
-                    "http://api-todo-estagio-production.up.railway.app:8080/todo/",
+                    "http://api-todo-estagio-production.up.railway.app/todo/",
                     {
                         method: "GET",
                         credentials: "include",
@@ -65,7 +65,7 @@ export default function TodoList() {
     const handleLogout = async () => {
         try {
             const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app:8080/user/logout",
+                "http://api-todo-estagio-production.up.railway.app/user/logout",
                 {
                     method: "POST",
                     credentials: "include",

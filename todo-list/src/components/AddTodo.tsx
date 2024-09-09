@@ -14,7 +14,7 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
 
         try {
             const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app:8080/todo",
+                "http://api-todo-estagio-production.up.railway.app/todo",
                 {
                     method: "POST",
                     headers: {

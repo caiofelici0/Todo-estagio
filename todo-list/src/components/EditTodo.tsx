@@ -20,7 +20,7 @@ export default function EditTodo({
 
         try {
             const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app:8080/todo/edit",
+                "http://api-todo-estagio-production.up.railway.app/todo/edit",
                 {
                     method: "PUT",
                     headers: {
