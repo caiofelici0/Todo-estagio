@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 export default function Login() {
     const [email, setEmail] = useState<string>("");
@@ -13,17 +14,14 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/user/login",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, password }),
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/user/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: "include",
+            });
 
             if (response.ok) {
                 router.push("/todo-list");

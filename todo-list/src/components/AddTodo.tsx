@@ -1,5 +1,6 @@
 import { Todo } from "@/types/Todo";
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 type AddTodoProps = {
     onSubmitTodo: (newTodo: Todo) => void;
@@ -13,20 +14,17 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
         e.preventDefault();
 
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/todo",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        title,
-                        description,
-                    }),
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/todo`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title,
+                    description,
+                }),
+                credentials: "include",
+            });
 
             if (response.ok) {
                 const data = await response.json();

@@ -10,6 +10,7 @@ import {
 import { Todo } from "@/types/Todo";
 import { useState } from "react";
 import EditTodo from "./EditTodo";
+import { API_URL } from "../../config";
 
 type TodoItemProps = {
     todo: Todo;
@@ -28,20 +29,17 @@ export default function TodoItem({
 
     const toggleIsCompleted = async () => {
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/todo/complete",
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: todo.id,
-                        isCompleted: !todo.isCompleted,
-                    }),
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/todo/complete`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: todo.id,
+                    isCompleted: !todo.isCompleted,
+                }),
+                credentials: "include",
+            });
 
             if (response.ok) {
                 const data = await response.json();
@@ -57,17 +55,14 @@ export default function TodoItem({
 
     const deleteTodo = async () => {
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/todo",
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ id: todo.id }),
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/todo`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: todo.id }),
+                credentials: "include",
+            });
 
             if (response.ok) {
                 onDeleted(todo.id);

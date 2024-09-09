@@ -1,5 +1,6 @@
 import { Todo } from "@/types/Todo";
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 type EditTodoProps = {
     todo: Todo;
@@ -19,21 +20,18 @@ export default function EditTodo({
         e.preventDefault();
 
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/todo/edit",
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: todo.id,
-                        title,
-                        description,
-                    }),
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/todo/edit`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: todo.id,
+                    title,
+                    description,
+                }),
+                credentials: "include",
+            });
 
             if (response.ok) {
                 const data = await response.json();

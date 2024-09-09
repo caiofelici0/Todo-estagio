@@ -5,6 +5,7 @@ import TodoItem from "@/components/TodoItem";
 import { Todo } from "@/types/Todo";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { API_URL } from "../../../config";
 
 export default function TodoList() {
     const [todos, setTodos] = useState<Todo[]>([]);
@@ -13,13 +14,10 @@ export default function TodoList() {
     useEffect(() => {
         const fetchTodos = async () => {
             try {
-                const response = await fetch(
-                    "http://api-todo-estagio-production.up.railway.app/todo/",
-                    {
-                        method: "GET",
-                        credentials: "include",
-                    }
-                );
+                const response = await fetch(`${API_URL}/todo/`, {
+                    method: "GET",
+                    credentials: "include",
+                });
 
                 if (response.ok) {
                     const data = await response.json();
@@ -64,13 +62,10 @@ export default function TodoList() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch(
-                "http://api-todo-estagio-production.up.railway.app/user/logout",
-                {
-                    method: "POST",
-                    credentials: "include",
-                }
-            );
+            const response = await fetch(`${API_URL}/user/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
 
             if (response.ok) {
                 router.push("/");

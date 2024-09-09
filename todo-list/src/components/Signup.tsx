@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 type SignupProps = {
     onSubmitSignup: () => void;
@@ -19,17 +20,14 @@ export default function Signup({ onSubmitSignup }: SignupProps) {
             setError("Confirme sua senha corretamente");
         else {
             try {
-                const response = await fetch(
-                    "http://api-todo-estagio-production.up.railway.app/user/signup",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ email, password }),
-                        credentials: "include",
-                    }
-                );
+                const response = await fetch(`${API_URL}/user/signup`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                    credentials: "include",
+                });
 
                 if (response.ok) {
                     onSubmitSignup();
