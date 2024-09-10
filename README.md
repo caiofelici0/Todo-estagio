@@ -2,6 +2,10 @@
 
 Este é o frontend do Projeto Lista de Tarefas para uma vaga de estágio. O projeto foi criado utilizando o framework Next.js, visando utilizar o React e o Typescript. A escolha do Next.js foi influenciada por outro projeto que estou fazendo, me familiarizando mais com a tecnologia.
 
+## Deploy do projeto:
+
+https://todo-estagio.vercel.app/
+
 ## Passos para rodar localmente:
 
 Para rodar o projeto primeiramente acesse a pasta todo-list/:
