@@ -36,6 +36,9 @@ export default function AddTodo({ onSubmitTodo }: AddTodoProps) {
         } catch (error) {
             console.error("Erro ao criar tarefa", error);
         }
+
+        setTitle("");
+        setDescription("");
     };
 
     return (
